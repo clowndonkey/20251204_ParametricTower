@@ -1,0 +1,30 @@
+{
+  "name": "20251204-parametric-tower",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.7.4",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.48.1",
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lil-gui": "^0.21.0",
+    "three": "^0.181.2",
+    "tinycolor2": "^1.6.0"
+  }
+}
