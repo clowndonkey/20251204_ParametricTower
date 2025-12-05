@@ -4,7 +4,7 @@ An experimental WebGL parametric tower generator that stacks procedural slabs in
 
 ## Features
 - Client-only Vite + TypeScript stack with Three.js, OrbitControls, and lil-gui.
-- Gradient-aware tower builder that interpolates twists, scales, and colors floor-by-floor.
+- Gradient-aware tower builder that interpolates twists, scales, and colors floor-by-floor with selectable easing curves.
 - Smooth parameter transitions using gsap to keep slider changes responsive.
 - Modularized scene, tower, UI, and utility layers for quick future extensions.
 
@@ -18,7 +18,10 @@ An experimental WebGL parametric tower generator that stacks procedural slabs in
 - `Floor Height` – vertical spacing between slabs.
 - `Slab Thickness` – extrusion depth per floor.
 - `Base Radius` – base footprint for slabs before scaling.
+- `Slab Sides` – number of faces for each slab footprint (3–10).
 - `Twist Min/Max` – degrees of rotation applied from bottom to top.
+- `Twist Curve` – easing profile (linear or quad variants) for how twist progresses.
 - `Scale Min/Max` – per-floor scaling interpolation for tapering/bulging.
+- `Scale Curve` – easing profile controlling how scale interpolates up the tower.
 - `Gradient Start/End` – color stops for bottom and top of the tower.
 - `Anim Duration` – easing time for parameter transitions.

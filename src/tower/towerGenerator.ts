@@ -9,15 +9,16 @@ import {
   Vector2,
 } from 'three';
 import { colorFromGradient } from '../utils/colorGradient';
-import { TowerParameterState } from '../types/params';
+import type { TowerParameterState } from '../types/params';
+import { applyCurve } from '../utils/curve';
 
-const createBaseShape = (radius: number): Shape => {
+const createBaseShape = (radius: number, segments: number): Shape => {
   const shape = new Shape();
   const points: Vector2[] = [];
-  const segments = 32;
+  const clampedSegments = Math.max(3, Math.floor(segments));
 
-  for (let i = 0; i <= segments; i += 1) {
-    const theta = (i / segments) * Math.PI * 2;
+  for (let i = 0; i <= clampedSegments; i += 1) {
+    const theta = (i / clampedSegments) * Math.PI * 2;
     const x = Math.cos(theta) * radius;
     const y = Math.sin(theta) * radius;
     points.push(new Vector2(x, y));
@@ -32,13 +33,19 @@ const createBaseShape = (radius: number): Shape => {
 const createFloorGeometry = (
   radius: number,
   thickness: number,
+  segments: number,
 ): ExtrudeGeometry => {
-  const shape = createBaseShape(radius);
-  return new ExtrudeGeometry(shape, {
+  const shape = createBaseShape(radius, segments);
+  const geometry = new ExtrudeGeometry(shape, {
     depth: thickness,
     bevelEnabled: false,
     steps: 1,
   });
+
+  geometry.rotateX(Math.PI / 2);
+  geometry.translate(0, thickness / 2, 0);
+
+  return geometry;
 };
 
 const applyVertexColor = (
@@ -70,15 +77,15 @@ export const buildTower = (params: TowerParameterState): Group => {
     metalness: 0.05,
   });
 
-  const floorCount = Math.max(1, Math.round(params.floorCount));
-  const floorHeight = Math.max(0.1, params.floorHeight);
-  const baseRadius = Math.max(0.2, params.baseRadius);
-  const thickness = Math.max(0.05, params.floorThickness);
+  const floorCount = Math.max(0, Math.round(params.floorCount));
+  const floorHeight = Math.max(0, params.floorHeight);
+  const baseRadius = Math.max(0, params.baseRadius);
+  const thickness = Math.max(0, params.floorThickness);
 
   for (let i = 0; i < floorCount; i += 1) {
     const progress = floorCount > 1 ? i / (floorCount - 1) : 0;
 
-    const geometry = createFloorGeometry(baseRadius, thickness);
+    const geometry = createFloorGeometry(baseRadius, thickness, params.sides);
 
     const color = colorFromGradient(
       params.gradientStart,
@@ -90,14 +97,16 @@ export const buildTower = (params: TowerParameterState): Group => {
 
     const mesh = new Mesh(geometry, material);
     mesh.position.y = i * floorHeight;
+    const twistProgress = applyCurve(progress, params.twistCurve);
     mesh.rotation.y = MathUtils.degToRad(
-      MathUtils.lerp(params.twistMin, params.twistMax, progress),
+      MathUtils.lerp(params.twistMin, params.twistMax, twistProgress),
     );
 
+    const scaleProgress = applyCurve(progress, params.scaleCurve);
     const scaleFactor = MathUtils.lerp(
       params.scaleMin,
       params.scaleMax,
-      progress,
+      scaleProgress,
     );
     mesh.scale.set(scaleFactor, 1, scaleFactor);
     mesh.castShadow = true;

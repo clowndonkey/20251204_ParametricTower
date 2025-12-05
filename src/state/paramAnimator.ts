@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { TowerParameterState } from '../types/params';
+import type { TowerParameterState } from '../types/params';
 
 type Listener = (state: TowerParameterState) => void;
 
