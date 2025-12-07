@@ -24,6 +24,8 @@ export const createBezierGraph = (
   const overlay = document.createElement('div');
   overlay.className = 'bezier-overlay';
   overlay.style.display = 'none';
+  overlay.style.left = '16px';
+  overlay.style.top = '120px';
 
   const panel = document.createElement('div');
   panel.className = 'bezier-panel';
@@ -34,6 +36,10 @@ export const createBezierGraph = (
   closeButton.type = 'button';
   closeButton.innerText = '×';
   panel.appendChild(closeButton);
+
+  const dragHandle = document.createElement('div');
+  dragHandle.className = 'bezier-drag-handle';
+  panel.appendChild(dragHandle);
 
   const canvas = document.createElement('canvas');
   canvas.width = CANVAS_SIZE;
@@ -184,10 +190,43 @@ export const createBezierGraph = (
     overlay.style.display = 'none';
   });
 
+  const setOverlayPosition = (x: number, y: number) => {
+    overlay.style.left = `${x}px`;
+    overlay.style.top = `${y}px`;
+  };
+
   const setVisible = (visible: boolean) => {
     overlay.style.display = visible ? 'flex' : 'none';
     overlay.style.pointerEvents = visible ? 'auto' : 'none';
   };
+
+  let isDraggingOverlay = false;
+  let dragOffset = { x: 0, y: 0 };
+
+  const handleDragMove = (event: PointerEvent) => {
+    if (!isDraggingOverlay) return;
+    const nextX = event.clientX - dragOffset.x;
+    const nextY = event.clientY - dragOffset.y;
+    setOverlayPosition(nextX, nextY);
+  };
+
+  const handleDragEnd = () => {
+    isDraggingOverlay = false;
+    window.removeEventListener('pointermove', handleDragMove);
+    window.removeEventListener('pointerup', handleDragEnd);
+  };
+
+  dragHandle.addEventListener('pointerdown', (event) => {
+    event.preventDefault();
+    isDraggingOverlay = true;
+    const rect = overlay.getBoundingClientRect();
+    dragOffset = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+    window.addEventListener('pointermove', handleDragMove);
+    window.addEventListener('pointerup', handleDragEnd);
+  });
 
   const update = (next: BezierGraphState) => {
     state = { ...next };

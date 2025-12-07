@@ -62,7 +62,7 @@ canvas {
   border: 1px solid #3a4154;
   border-radius: 10px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-  padding: 10px;
+  padding: 28px 10px 10px 10px;
   position: relative;
   pointer-events: auto;
 }
@@ -72,6 +72,18 @@ canvas {
   height: 100%;
   border-radius: 6px;
   cursor: crosshair;
+}
+
+.bezier-drag-handle {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  right: 34px;
+  height: 16px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: move;
 }
 
 .bezier-close {
