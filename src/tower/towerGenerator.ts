@@ -67,6 +67,12 @@ const applyVertexColor = (
   geometry.setAttribute('color', new BufferAttribute(colors, 3));
 };
 
+const normalizeGraphState = (graph: TowerParameterState['scaleGraph']) => ({
+  ...graph,
+  startY: graph.startY ?? 0,
+  endY: graph.endY ?? 1,
+});
+
 export const buildTower = (params: TowerParameterState): Group => {
   const tower = new Group();
   tower.name = 'TowerGroup';
@@ -104,7 +110,7 @@ export const buildTower = (params: TowerParameterState): Group => {
     );
 
     const scaleProgress = params.useScaleGraph
-      ? evaluateBezier(progress, params.scaleGraph)
+      ? evaluateBezier(progress, normalizeGraphState(params.scaleGraph))
       : applyCurve(progress, params.scaleCurve);
     const scaleFactor = MathUtils.lerp(
       params.scaleMin,

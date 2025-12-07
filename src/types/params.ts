@@ -3,6 +3,8 @@ export interface BezierGraphState {
   y1: number;
   x2: number;
   y2: number;
+  startY: number;
+  endY: number;
 }
 
 export interface TowerParameterState {

@@ -42,8 +42,29 @@ const solveCurveX = (x: number, mX1: number, mX2: number): number => {
   return binarySubdivide(x, 0, 1, mX1, mX2);
 };
 
-export const evaluateBezier = (t: number, curve: BezierGraphState): number => {
+const sampleCurveY = (
+  t: number,
+  startY: number,
+  y1: number,
+  y2: number,
+  endY: number,
+) => {
+  const invT = 1 - t;
+  return (
+    invT * invT * invT * startY +
+    3 * invT * invT * t * y1 +
+    3 * invT * t * t * y2 +
+    t * t * t * endY
+  );
+};
+
+export const evaluateBezier = (
+  t: number,
+  curve: BezierGraphState,
+): number => {
   const clampedT = Math.min(Math.max(t, 0), 1);
   const solvedT = solveCurveX(clampedT, curve.x1, curve.x2);
-  return calcBezier(solvedT, curve.y1, curve.y2);
+  const startY = curve.startY ?? 0;
+  const endY = curve.endY ?? 1;
+  return sampleCurveY(solvedT, startY, curve.y1, curve.y2, endY);
 };

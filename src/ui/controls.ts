@@ -31,6 +31,8 @@ export const defaultParams: TowerParameterState = {
     y1: 0.05,
     x2: 0.8,
     y2: 0.95,
+    startY: 0,
+    endY: 1,
   },
   scaleCurve: 'easeOutQuad',
   gradientStart: '#aa0e0e',

@@ -7,7 +7,7 @@ const CANVAS_SIZE = 240;
 const PADDING = 18;
 const GRAPH_SIZE = CANVAS_SIZE - PADDING * 2;
 
-type HandleKey = 'p1' | 'p2';
+type HandleKey = 'p1' | 'p2' | 'start' | 'end';
 
 export interface BezierGraphAPI {
   setVisible: (visible: boolean) => void;
@@ -94,8 +94,8 @@ export const createBezierGraph = (
   };
 
   const drawCurve = () => {
-    const start = toCanvas({ x: 0, y: 0 });
-    const end = toCanvas({ x: 1, y: 1 });
+    const start = toCanvas({ x: 0, y: state.startY });
+    const end = toCanvas({ x: 1, y: state.endY });
     const cp1 = toCanvas({ x: state.x1, y: state.y1 });
     const cp2 = toCanvas({ x: state.x2, y: state.y2 });
 
@@ -143,11 +143,15 @@ export const createBezierGraph = (
   render();
 
   const findHandle = (x: number, y: number): HandleKey | null => {
+    const start = toCanvas({ x: 0, y: state.startY });
+    const end = toCanvas({ x: 1, y: state.endY });
     const cp1 = toCanvas({ x: state.x1, y: state.y1 });
     const cp2 = toCanvas({ x: state.x2, y: state.y2 });
     const dist = (pt: { x: number; y: number }) =>
       Math.hypot(pt.x - x, pt.y - y);
 
+    if (dist(start) <= 12) return 'start';
+    if (dist(end) <= 12) return 'end';
     if (dist(cp1) <= 12) return 'p1';
     if (dist(cp2) <= 12) return 'p2';
     return null;
@@ -160,8 +164,12 @@ export const createBezierGraph = (
 
     if (activeHandle === 'p1') {
       state = { ...state, x1: normalized.x, y1: normalized.y };
-    } else {
+    } else if (activeHandle === 'p2') {
       state = { ...state, x2: normalized.x, y2: normalized.y };
+    } else if (activeHandle === 'start') {
+      state = { ...state, startY: normalized.y };
+    } else if (activeHandle === 'end') {
+      state = { ...state, endY: normalized.y };
     }
 
     render();
