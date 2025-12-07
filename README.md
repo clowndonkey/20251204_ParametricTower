@@ -14,14 +14,11 @@ An experimental WebGL parametric tower generator that stacks procedural slabs in
 3. Adjust sliders in the lil-gui panel to regenerate the tower in real time.
 
 ## Controls
-- `Floors` – total number of slabs.
-- `Floor Height` – vertical spacing between slabs.
-- `Slab Thickness` – extrusion depth per floor.
-- `Base Radius` – base footprint for slabs before scaling.
-- `Slab Sides` – number of faces for each slab footprint (3–10).
-- `Twist Min/Max` – degrees of rotation applied from bottom to top.
-- `Twist Curve` – easing profile (linear or quad variants) for how twist progresses.
-- `Scale Min/Max` – per-floor scaling interpolation for tapering/bulging.
-- `Scale Curve` – easing profile controlling how scale interpolates up the tower.
-- `Gradient Start/End` – color stops for bottom and top of the tower.
-- `Anim Duration` – easing time for parameter transitions.
+- **Structure** – `Floors`, `Floor Height`, `Slab Thickness`, `Base Radius`, `Slab Sides`.
+- **Twist Gradient** – `Twist Min/Max` plus `Twist Curve` easing presets.
+- **Scale Gradient** – `Scale Min/Max`, `Scale Curve`, and a `Use Graph` toggle that opens a draggable Bezier editor for custom scaling falloffs.
+- **Gradient Colors** – `Gradient Start/End` for bottom-to-top vertex colors.
+- **Motion** – `Auto Spin` toggle and `Spin Degrees` (per-second rotation, negative to reverse).
+- **Environment** – background color picker, `Shadows` toggle, and `Ambient Light` slider to lift/dim the scene.
+- **Save** – `Mesh (.obj)` for geometry export, `Image` for viewport screenshots, `State` for storing presets plus a dropdown to reapply them.
+- `Transition Smoothness` – easing time for parameter transitions.

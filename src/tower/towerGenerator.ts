@@ -11,6 +11,7 @@ import {
 import { colorFromGradient } from '../utils/colorGradient';
 import type { TowerParameterState } from '../types/params';
 import { applyCurve } from '../utils/curve';
+import { evaluateBezier } from '../utils/bezier';
 
 const createBaseShape = (radius: number, segments: number): Shape => {
   const shape = new Shape();
@@ -102,7 +103,9 @@ export const buildTower = (params: TowerParameterState): Group => {
       MathUtils.lerp(params.twistMin, params.twistMax, twistProgress),
     );
 
-    const scaleProgress = applyCurve(progress, params.scaleCurve);
+    const scaleProgress = params.useScaleGraph
+      ? evaluateBezier(progress, params.scaleGraph)
+      : applyCurve(progress, params.scaleCurve);
     const scaleFactor = MathUtils.lerp(
       params.scaleMin,
       params.scaleMax,
